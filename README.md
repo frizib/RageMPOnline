@@ -22,7 +22,7 @@
 
 ## Updating information about the Liberty Arizona V server
 
-This code is a simple HTML file for displaying information about the Arina V Liberty server.
+This code is a simple HTML file for displaying information about the Arizona V Liberty server.
 
 ### Technologies used
 
