@@ -1,6 +1,7 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <title>Liberty :: RageOnline</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     </head>
     <body>
@@ -21,7 +22,7 @@
                 function addLeadingZero(value) {
                     return value < 10 ? "0" + value : value;
                 }
-                
+
                 // Функция для форматирования времени в формате HH:mm:ss
                 function formatTime(date) {
                     var hours = addLeadingZero(date.getHours());
@@ -75,14 +76,14 @@
                     var currentTime = new Date();
                     $("#requestTime").removeClass("alert-danger alert-warning").addClass("alert-info").html("Время отправки запроса на cdn: " + formatTime(currentTime));
                     // Запускаем таймер для обновления информации о сервере и времени
-                    setTimeout(updateServerInfo, 1000); // Интервал обновления времени (1 секунда = 1000 миллисекунд)
+                    setTimeout(updateServerInfo, 500); // Интервал обновления времени (1 секунда = 1000 миллисекунд)
                 }
                 
                 updateServerInfo(); // Запускаем первичное обновление информации о сервере и времени
                 
                 function playAlertSound() {
                     var audio = new Audio('a44f10ae474a4bc.mp3');
-                    audio.play();
+                    audio.play(); 
                 }
             });
         </script>
