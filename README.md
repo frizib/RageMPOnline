@@ -17,7 +17,7 @@
 
 1. Скачайте все файлы из репозитория.
 2. Откройте `index.html` в любом современном веб-браузере.
-3. Вы увидите информацию о сервере Liberty и текущее время.
+3. Вы увидите информацию о сервере Liberty.
 4. При смене статуса сервера (онлайн/оффлайн) будет проигрываться звуковой файл `a44f10ae474a4bc.mp3`.
 
 ## Updating information about the Liberty Arizona V server
@@ -39,5 +39,5 @@ This code is a simple HTML file for displaying information about the Arizona V L
 
 1. Download all files from the repository.
 2. Open `index.html ` in any modern web browser.
-3. You will see information about the Liberty server and the current time.
+3. You will see information about the Liberty server.
 4. When changing the server status (online/offline), the audio file `a44f10ae474a4bc.mp3` will be played.
