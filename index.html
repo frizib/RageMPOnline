@@ -1,91 +1,83 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Liberty :: RageOnline</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    </head>
-    <body>
-        <div class="container">
-            <div class="row mt-4">
-                <div class="col-md-6 offset-md-3">
-                    <div id="serverInfo" class="alert"></div>
-                    <div id="requestTime" class="alert"></div>
-                </div>
-            </div>
-        </div>
+<head>
+    <meta charset="utf-8">
+    <title>Liberty :: RageOnline</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <style>
+        body {
+            background: linear-gradient(to right, #E0FFFF, #F0F8FF);
+        }
         
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                // Функция для добавления нулей к времени, если значение меньше 10
-                function addLeadingZero(value) {
-                    return value < 10 ? "0" + value : value;
-                }
+        #serverInfo {
+            text-align: center;
+            margin: 0 auto;
+            width: 50%;
+        }
 
-                // Функция для форматирования времени в формате HH:mm:ss
-                function formatTime(date) {
-                    var hours = addLeadingZero(date.getHours());
-                    var minutes = addLeadingZero(date.getMinutes());
-                    var seconds = addLeadingZero(date.getSeconds());
-                    return hours + ":" + minutes + ":" + seconds;
-                }
-                
-                // Переменная для хранения предыдущего статуса сервера
-                var previousStatus = null;
-                
-                // Функция для обновления информации о сервере и времени
-                function updateServerInfo() {
-                    // Отключаем кэширование запросов
-                    $.ajaxSetup({
-                        cache: false
-                    });
-                    
-                    $.ajax({
-                        url: 'https://cdn.rage.mp/master/',
-                        success: function(data) {
-                            var serverData = JSON.parse(data);
-                            var targetServer = serverData['s1.arizona-v.com:22005'];
-                            
-                            if (targetServer) {
-                                var onlinePlayers = targetServer.players;
-                                if (onlinePlayers > 0) {
-                                    if (previousStatus !== 'online') {
-                                        $("#serverInfo").removeClass("alert-danger").addClass("alert-success").html("Сервер Liberty онлайн. Игроков онлайн: " + onlinePlayers);
-                                        playAlertSound();
-                                        previousStatus = 'online';
-                                    }
-                                } else {
-                                    if (previousStatus !== 'offline') {
-                                        $("#serverInfo").removeClass("alert-success").addClass("alert-danger").html("Сервер Liberty оффлайн. Нет игроков онлайн.");
-                                        playAlertSound();
-                                        previousStatus = 'offline';
-                                    }
-                                }
-                            } else {
-                                if (previousStatus !== 'not found') {
-                                    $("#serverInfo").removeClass("alert-success alert-warning").addClass("alert-danger").html("Сервер Liberty не найден в массиве.");
-                                    playAlertSound();
-                                    previousStatus = 'not found';
-                                }
-                            }
-                        }
-                    });
-                    
-                    // Обновляем время отправки запроса
-                    var currentTime = new Date();
-                    $("#requestTime").removeClass("alert-danger alert-warning").addClass("alert-info").html("Время отправки запроса на cdn: " + formatTime(currentTime));
-                    // Запускаем таймер для обновления информации о сервере и времени
-                    setTimeout(updateServerInfo, 500); // Интервал обновления времени (1 секунда = 1000 миллисекунд)
-                }
-                
-                updateServerInfo(); // Запускаем первичное обновление информации о сервере и времени
-                
-                function playAlertSound() {
-                    var audio = new Audio('a44f10ae474a4bc.mp3');
-                    audio.play(); 
-                }
+        #serverInfo .alert {
+            color: #fff;
+        }
+        
+        #serverInfo .alert-success {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        
+        #serverInfo .alert-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        var alertSound = new Audio('a44f10ae474a4bc.mp3'); // Замените 'path/to/alert-sound.mp3' на путь к звуковому файлу оповещения
+        
+        setInterval(function() {
+            $.ajaxSetup({
+                cache: false
             });
-        </script>
-    </body>
+            $.ajax({
+                url: 'https://cdn.rage.mp/master/',
+                success: function(data) {
+                    var serverData = JSON.parse(data);
+                    var targetServer = serverData['s1.arizona-v.com:22005'];
+                    
+                    if (targetServer) {
+                        var onlinePlayers = targetServer.players;
+                        if (onlinePlayers > 0) {
+                            $("#serverInfo").html("<div class='alert alert-success' role='alert'>Сервер Liberty онлайн. Игроков онлайн: " + onlinePlayers + "</div>");
+                        } else {
+                            $("#serverInfo").html("<div class='alert alert-danger' role='alert'>Сервер Liberty оффлайн. Нет игроков онлайн.</div>");
+                            playAlertSound();
+                        }
+                    } else {
+                        $("#serverInfo").html("<div class='alert alert-danger' role='alert'>Сервер Liberty не найден в массиве (Возможно отключен)</div>");
+                        // playAlertSound();
+                    }
+                    
+                },
+                error: function() {
+                    $("#serverInfo").html("<div class='alert alert-danger' role='alert'>Ошибка при получении данных.</div>");
+                    playAlertSound();
+                }
+                
+            });
+
+            
+        }, 500); // Интервал обновления в миллисекундах
+        
+        function playAlertSound() {
+            alertSound.play();
+        }
+    });
+    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div id="serverInfo"></div>
+    </div>
+</body>
 </html>
